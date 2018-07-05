@@ -30,11 +30,11 @@ end
 comments = Comment.all
 
 puts "#{Post.count}"
-Post.find_or_create_by(title: "A unique title", body: "A unique body")
+Post.find_or_create_by!(title: "A unique title", body: "A unique body")
 puts "#{Post.count}"
 
 puts "#{Comment.count}"
-Comment.find_or_create_by(body: "A unique body")
+Comment.find_or_create_by!(post: Post.all.find_by(title: "A unique title"), body: "A unique body")
 puts "#{Comment.count}"
 
 puts "Seed finished"
