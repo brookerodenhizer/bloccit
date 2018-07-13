@@ -14,34 +14,16 @@ class PostsController < ApplicationController
   end
 
   def new
-<<<<<<< HEAD
     @post = Post.new
   end
-
-  def create
-# #9
-=======
-    # #7
-    @post = Post.new
-  end
-
 
   def create
     # #9
->>>>>>> rails_crud
+
     @post = Post.new
     @post.title = params[:post][:title]
     @post.body = params[:post][:body]
 
-<<<<<<< HEAD
-# #10
-    if @post.save
-# #11
-      flash[:notice] = "Post was saved."
-      redirect_to @post
-    else
-# #12
-=======
     # #10
     if @post.save
       # #11
@@ -49,7 +31,6 @@ class PostsController < ApplicationController
       redirect_to @post
     else
       # #12
->>>>>>> rails_crud
       flash.now[:alert] = "There was an error saving the post. Please try again."
       render :new
     end
