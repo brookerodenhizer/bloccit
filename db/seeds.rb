@@ -40,11 +40,19 @@ comments = Comment.all
 end
 advertisements = Advertisement.all
 
+100.times do
+  Question.create!(
+    title: RandomData.random_sentence,
+    body:  RandomData.random_paragraph,
+    resolved: false
+  )
+end
+
 puts "#{Advertisement.count}"
 Advertisement.find_or_create_by(title: "A unique title", copy: "Unique copy", price: 99)
 puts "#{Advertisement.count}
 
-puts "#{Post.count}"
+puts "#{Post.count}
 Post.find_or_create_by!(title: "A unique title", body: "A unique body")
 puts "#{Post.count}"
 
@@ -55,4 +63,5 @@ puts "#{Comment.count}"
 puts "Seed finished"
 puts "#{Advertisement.count} advertisement created"
 puts "#{Post.count} posts created"
-puts "#{Comment.count} comments created"
+puts "#{Comment.count} comments created
+puts "#{Question.count} questions created"
