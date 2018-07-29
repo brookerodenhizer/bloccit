@@ -15,4 +15,18 @@ class User < ApplicationRecord
 
   # #6
   has_secure_password
+
+  def set_uppercase
+    name_array = []
+    if name != nil
+      name.split.each do |name_part|
+        next if name_part == nil
+        name_array << name_part.capitalize
+      end
+
+      self.name = name_array.join(" ")
+    end
+  end
+
+  after_save  :set_uppercase
 end
