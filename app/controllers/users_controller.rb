@@ -3,6 +3,10 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  def user_params
+    params.require(:user).permit(:email, :password, :password_confirmation)
+  end
+
   def confirm
     @user = User.new
     @user.name = params[:user][:name]
@@ -29,4 +33,7 @@ class UsersController < ApplicationController
       render :new
     end
   end
+
+  helper_method :user_params
+  
 end
