@@ -86,7 +86,7 @@ Advertisement.find_or_create_by(title: "A unique title", copy: "Unique copy", pr
 puts "#{Advertisement.count}
 
 puts "#{Post.count}"
-Post.find_or_create_by!(title: "A unique title", body: "A unique body")
+Post.find_or_create_by!(title: "A unique title", body: "A unique bodyyyyyyyyyyyyyyyy", user: users.sample, topic: topics.sample)
 puts "#{Post.count}"
 
 puts "#{Comment.count}"

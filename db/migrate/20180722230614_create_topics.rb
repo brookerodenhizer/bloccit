@@ -4,7 +4,6 @@ class CreateTopics < ActiveRecord::Migration[5.2]
       t.string :name
       t.boolean :public, default: true
       t.text :description
-      add_column :topic_id, :integer
 
       t.timestamps
     end
