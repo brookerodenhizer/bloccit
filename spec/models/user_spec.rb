@@ -70,7 +70,7 @@ RSpec.describe User, type: :model do
       before do
         user.admin!
       end
-      
+
       it "returns false for #member?" do
         expect(user.member?).to be_falsey
       end
