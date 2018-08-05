@@ -1,16 +1,15 @@
 # This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
+# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
 #
 # Examples:
 #
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
+#   Mayor.create(name: 'Emanuel', city: cities.first)
 require 'random_data'
 
 # Create Users
 5.times do
   User.create!(
-# #3
   name:     RandomData.random_name,
   email:    RandomData.random_email,
   password: RandomData.random_sentence
@@ -29,30 +28,19 @@ topics = Topic.all
 
 # Create Posts
 50.times do
-
-  Post.create!(
-
+  post = Post.create!(
     user:   users.sample,
     topic:  topics.sample,
     title:  RandomData.random_sentence,
     body:   RandomData.random_paragraph
   )
+
+  post.update_attribute(:created_at, rand(10.minutes .. 1.year).ago)
+  rand(1..5).times { post.votes.create!(value: [-1, 1].sample, user: users.sample) }
 end
 posts = Post.all
 
-# Create SponsoredPosts
-25.times do
-  SponsoredPost.create!(
-    topic:  topics.sample,
-    title:  RandomData.random_sentence,
-    body:   RandomData.random_paragraph,
-    price:  rand(10...50)
-  )
-end
-
-
 # Create Comments
-# #3
 100.times do
   Comment.create!(
     user: users.sample,
@@ -60,39 +48,8 @@ end
     body: RandomData.random_paragraph
   )
 end
-comments = Comment.all
 
-20.times do
-
-  Advertisement.create!(
-
-    title: RandomData.random_sentence,
-    copy: RandomData.random_paragraph,
-    price: 99
-  )
-end
-advertisements = Advertisement.all
-
-100.times do
-  Question.create!(
-    title: RandomData.random_sentence,
-    body:  RandomData.random_paragraph,
-    resolved: false
-  )
-end
-
-puts "#{Advertisement.count}"
-Advertisement.find_or_create_by(title: "A unique title", copy: "Unique copy", price: 99)
-puts "#{Advertisement.count}
-
-puts "#{Post.count}"
-Post.find_or_create_by!(title: "A unique title", body: "A unique bodyyyyyyyyyyyyyyyy", user: users.sample, topic: topics.sample)
-puts "#{Post.count}"
-
-puts "#{Comment.count}"
-Comment.find_or_create_by!(post: Post.all.find_by(title: "A unique title"), body: "A unique body")
-puts "#{Comment.count}"
-
+# Create an admin user
 admin = User.create!(
   name:     'Admin User',
   email:    'admin@example.com',
@@ -100,6 +57,7 @@ admin = User.create!(
   role:     'admin'
 )
 
+# Create a member
 member = User.create!(
   name:     'Member User',
   email:    'member@example.com',
@@ -109,7 +67,6 @@ member = User.create!(
 puts "Seed finished"
 puts "#{User.count} users created"
 puts "#{Topic.count} topics created"
-puts "#{Advertisement.count} advertisement created"
 puts "#{Post.count} posts created"
-puts "#{Comment.count} comments created
-puts "#{Question.count} questions created"
+puts "#{Comment.count} comments created"
+puts "#{Vote.count} votes created"
