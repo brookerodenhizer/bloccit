@@ -5,19 +5,16 @@ RSpec.describe Post, type: :model do
   let(:description) { RandomData.random_paragraph }
   let(:title) { RandomData.random_sentence }
   let(:body) { RandomData.random_paragraph }
-
-  let(:topic) { Topic.create!(name: name, description: description) }
-
-  let(:user) { User.create!(name: "Bloccit User", email: "user@bloccit.com", password: "helloworld") }
-
-  let(:post) { topic.posts.create!(title: title, body: body, user: user) }
+  let(:topic) { create(:topic) }
+  let(:user) { create(:user) }
+  let(:post) { create(:post) }
 
   it { is_expected.to have_many(:comments) }
   it { is_expected.to have_many(:votes) }
   it { is_expected.to have_many(:favorites) }
+
   it { is_expected.to belong_to(:topic) }
   it { is_expected.to belong_to(:user) }
-
 
   it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to validate_presence_of(:body) }
@@ -28,34 +25,30 @@ RSpec.describe Post, type: :model do
   it { is_expected.to validate_length_of(:body).is_at_least(20) }
 
   describe "attributes" do
-    it "has a title, body, and user attribute" do
-      expect(post).to have_attributes(title: title, body: body, user: user)
+    it "has title, body, and user attribute" do
+      expect(post).to have_attributes(title: post.title, body: post.body)
     end
   end
 
   describe "voting" do
-
     before do
-      3.times { post.votes.create!(value: 1, user: user) }
-      2.times { post.votes.create!(value: -1, user: user) }
+      3.times { post.votes.create!(value: 1) }
+      2.times { post.votes.create!(value: -1) }
       @up_votes = post.votes.where(value: 1).count
       @down_votes = post.votes.where(value: -1).count
     end
 
-
     describe "#up_votes" do
-      it "counts the number of votes with value = 1" do
-        expect( post.up_votes ).to eq(@up_votes)
+      it "counts the number of votes with the value = 1" do
+        expect( post.up_votes ).to eq (@up_votes)
       end
     end
-
 
     describe "#down_votes" do
       it "counts the number of votes with value = -1" do
         expect( post.down_votes ).to eq(@down_votes)
       end
     end
-
 
     describe "#points" do
       it "returns the sum of all down and up votes" do
@@ -71,13 +64,13 @@ RSpec.describe Post, type: :model do
 
       it "updates the rank when an up vote is created" do
         old_rank = post.rank
-        post.votes.create!(value: 1, user: user)
+        post.votes.create!(value: 1)
         expect(post.rank).to eq (old_rank + 1)
       end
 
       it "updates the rank when a down vote is created" do
         old_rank = post.rank
-        post.votes.create!(value: -1, user: user)
+        post.votes.create!(value: -1)
         expect(post.rank).to eq (old_rank - 1)
       end
     end
